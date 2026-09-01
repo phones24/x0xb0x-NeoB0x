@@ -395,6 +395,8 @@ void start_stop(void)
 	if (!playing && cmd == MIDI_START)
 	{ // START !
 
+		tempoMeasure = 0; // Allow time for the first external clock after Start.
+
 		start_fn();
 
 		set_led(LED_RS);

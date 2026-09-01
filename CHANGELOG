@@ -9,6 +9,8 @@ NeoB0x 1.00  fork of MarOS15-V1.82 (2026-08-29)
 	  restores the full 16-byte pattern
 	+ auto-stop when the external clock is lost (keeps unsaved edits in
 	  sync'd edit mode)
+	+ fixed: external Start after clock idle no longer immediately triggers
+	  clock-loss auto-stop
 	+ reports own c0nb0x identity: osID 42, name "NEOB0X", version 100
 	  ("1.00")
 	+ Makefile build (Linux/macOS), CI + automated releases
