@@ -3,10 +3,7 @@ name: pages
 on:
   push:
     branches:
-      - master
-    paths:
-      - docs/**
-      - .github/workflows/pages.yml
+      - main
   workflow_dispatch:
 
 permissions:

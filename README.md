@@ -16,7 +16,7 @@ automated releases.
 - [One-page HTML cheatsheet](https://phones24.github.io/x0xb0x-NeoB0x/cheatsheet.html) —
   searchable reference for every mode and panel control.
 
-## Building
+## Prepare
 
 The firmware builds with the standard AVR toolchain (avr-gcc, avr-libc, binutils and make).
 
@@ -36,8 +36,9 @@ brew install avr-binutils avr-gcc avr-libc
 **Windows**
 
 Use Microchip Studio (the successor of Atmel Studio) and build the included
-`NeoB0x_2561.cproj`. Alternatively, install an avr-gcc toolchain with make and
-run `compile.cmd` from a command prompt.
+`NeoB0x_2561.cproj`. Alternatively, install an avr-gcc toolchain with make.
+
+## Building
 
 Build either target from the repository root:
 
@@ -49,11 +50,6 @@ Build either target from the repository root:
 On Windows, run `compile.cmd <mcu>` instead.
 
 The resulting hex file is written to `out/<mcu>/NeoB0x_<mcu>.hex`.
-
-Note: the atmega162 build is very tight on flash. It only fits with all
-features (including DIN sync master and the extended randomizer scales) by
-using aggressive size flags (`-mcall-prologues`, reduced inlining) — barely
-~60 bytes to spare.
 
 ## Credits & history
 
