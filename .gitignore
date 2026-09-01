@@ -1,0 +1,15 @@
+Debug/
+out/
+*.o
+*.elf
+*.hex
+*.eep
+*.lss
+*.map
+power
+FUNCTION
+bin/
+out/
+flash_*.sh
+AGENTS.md
+.clang-format

@@ -1,0 +1,14 @@
+NeoB0x 1.00  fork of MarOS15-V1.82 (2026-08-29)
+	+ randomizer scales: phrygian, locrian, mixolydian + scale-aware
+	  UP/DOWN transpose; selected scale persists in the existing
+	  MarOS-compatible EEPROM slot
+	+ fixed: settings defaults bit masks, note 42 held-notes leak, LED
+	  index bounds check, atomic swing timeouts, MIDI RX queue overflow,
+	  UART pattern bounds check, tempo EEPROM wear (debounced writes)
+	+ fixed: pattern clear (double-click F) now fills all steps, undo
+	  restores the full 16-byte pattern
+	+ auto-stop when the external clock is lost (keeps unsaved edits in
+	  sync'd edit mode)
+	+ reports own c0nb0x identity: osID 42, name "NEOB0X", version 100
+	  ("1.00")
+	+ Makefile build (Linux/macOS), CI + automated releases

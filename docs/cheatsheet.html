@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>NeoB0x cheatsheet</title>
+  <style>
+    :root {
+      --text: #171717;
+      --muted: #555;
+      --surface: #fff;
+      --soft: #f3f3f3;
+      --line: #d8d8d8;
+      --danger: #333;
+      --radius: 0.75rem;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--surface);
+      font: 1.125rem/1.65 var(--mono);
+    }
+    a { color: inherit; }
+    .shell { width: min(67.5rem, calc(100% - 1.25rem)); margin: 0 auto; }
+    .skip-link { position: fixed; left: 0.75rem; top: -5rem; z-index: 20; padding: 0.625rem 0.875rem; color: #fff; background: var(--text); }
+    .skip-link:focus { top: 0.75rem; }
+
+    header { padding: 2.5rem 0 1.625rem; }
+    h1 { max-width: 56.25rem; margin: 0; font: 800 clamp(2.625rem, 7vw, 5.125rem)/.96 var(--mono); letter-spacing: -.06em; text-transform: uppercase; }
+    h1 span { color: var(--muted); }
+
+    main { padding: 0 0 6rem; }
+    .nav-row { display: flex; align-items: flex-start; gap: 1.25rem; margin: 0 0 2.625rem; }
+    .section-nav { display: flex; flex-wrap: wrap; gap: 0.625rem; flex: 1 1 auto; }
+    .section-link { padding: 0.5625rem 0.8125rem; color: var(--text); background: var(--surface); border: 1px solid #aaa; border-radius: 0.4375rem; font-size: 0.9375rem; font-weight: 700; text-decoration: none; }
+    .section-link:hover, .section-link:focus-visible { color: #fff; background: var(--text); border-color: var(--text); }
+
+    .manual-section { margin: 0 0 4.375rem; scroll-margin-top: 1rem; }
+    .section-title { margin: 0 0 1.25rem; }
+    .section-title h2 { margin: 0; font: 800 clamp(1.875rem, 4vw, 2.875rem)/1.08 var(--mono); letter-spacing: -.04em; text-transform: uppercase; }
+    .cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    .card, .card.wide, .card.full { grid-column: 1; min-width: 0; padding: 1.625rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+    .card h3 { margin: 0 0 0.75rem; font: 800 1.3125rem/1.3 var(--mono); text-transform: uppercase; }
+    .card h4 { margin: 1.25rem 0 0.5625rem; color: var(--text); font: 700 1rem var(--mono); text-transform: uppercase; }
+    .card p { margin: 0 0 0.75rem; color: var(--muted); }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul, .card ol { margin: 0.5625rem 0 0; padding-left: 1.5rem; }
+    .card li + li { margin-top: 0.5rem; }
+    x-key { display: inline-block; margin: 0.0625rem 0.125rem; padding: 0.0625rem 0.4375rem; color: #fff; background: var(--text); border: 1px solid var(--text); border-bottom-width: 0.1875rem; border-radius: 0.3125rem; font: 700 .9em var(--mono); white-space: nowrap; }
+    x-wkey { display: inline-block; margin: 0.0625rem 0.125rem; padding: 0.0625rem 0.4375rem; color: var(--text); background: var(--surface); border: 1px solid var(--text); border-bottom-width: 0.1875rem; border-radius: 0.3125rem; font: 700 .9em var(--mono); white-space: nowrap; }
+    .note { padding: 0.75rem 0.875rem; color: var(--text) !important; background: var(--soft); border-radius: 0.4375rem; margin-top: 0.5rem !important; }
+    .muted { opacity: .7; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+    th, td { padding: 0.6875rem 0.75rem; text-align: left; vertical-align: top; border-top: 1px solid var(--line); }
+    th { color: var(--text); font: 700 0.8125rem var(--mono); text-transform: uppercase; }
+    td { color: var(--muted); }
+    td:first-child { color: var(--text); }
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    .mode-cell { padding: 0.5rem 0.75rem; background: var(--soft); border-radius: 0.5rem; }
+    .mode-cell b { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; color: var(--text); font: 700 0.9375rem/1.25 var(--mono); }
+    .mode-link { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; border-radius: 0.3125rem; color: var(--muted); text-decoration: none; }
+    .mode-link:hover, .mode-link:focus-visible { color: #fff; background: var(--text); }
+    .mode-cell small { display: block; color: var(--muted); font-size: 0.8125rem; line-height: 1.4; margin-top: 0.25rem; }
+    .mode-cell.off b { color: var(--danger); }
+    .table-note { margin-top: 0.875rem; padding: 0.625rem 0.8125rem; font-size: .85em; color: var(--muted); background: var(--soft); border-radius: 0.4375rem; }
+
+    footer { padding: 1.625rem 0 2.625rem; color: var(--muted); border-top: 1px solid var(--line); font: 0.875rem/1.6 var(--mono); }
+    footer .shell { display: flex; justify-content: space-between; gap: 1.25rem; }
+
+    @media (max-width: 700px) {
+      body { font-size: 0.9375rem; }
+      .shell { width: min(100% - 1.5rem, 67.5rem); }
+      header { padding-top: 1.5rem; }
+      .section-nav { gap: 0.4375rem; }
+      .nav-row { flex-direction: column; gap: 1rem; }
+      .panel-thumb { width: 100%; flex-basis: auto; }
+      .section-link { font-size: 0.8125rem; }
+      .card, .card.wide, .card.full { padding: 1.25rem; }
+      .card h3 { font-size: 1.125rem; }
+      .card h4 { font-size: 0.875rem; }
+      th { font-size: 0.75rem; }
+      table { font-size: 0.875rem; min-width: 30rem; }
+      .mode-cell b { font-size: 0.875rem; }
+      .mode-cell small { font-size: 0.75rem; }
+      .mode-grid { grid-template-columns: 1fr; }
+      .table-scroll { overflow-x: auto; }
+      footer .shell { display: block; }
+    }
+    @media print {
+      body { background: #fff; font-size: 10pt; }
+      .section-nav { display: none; }
+      header { padding-top: 0.625rem; }
+      h1 { font-size: 35pt; }
+      .manual-section { break-inside: avoid; margin-bottom: 1.5rem; }
+      .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <h1>NeoB0x <span>cheatsheet</span></h1>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="nav-row">
+      <nav class="section-nav" aria-label="Jump to section">
+        <a class="section-link" href="#overview">Panel and modes</a>
+        <a class="section-link" href="#play">Pattern Play</a>
+        <a class="section-link" href="#tempo">Tempo Parameters</a>
+        <a class="section-link" href="#edit">Pattern Edit</a>
+        <a class="section-link" href="#randomizer">Pattern Randomizer</a>
+        <a class="section-link" href="#midi">MIDI</a>
+        <a class="section-link" href="#keyboard">Keyboard</a>
+        <a class="section-link" href="#random">Random Mode</a>
+        <a class="section-link" href="#userc">User C Settings</a>
+        <a class="section-link" href="#bootloader">Bootloader</a>
+      </nav>
+    </div>
+
+    <section class="manual-section section-overview" id="overview">
+      <div class="section-title"><h2>Panel and modes</h2></div>
+      <div class="cards">
+        <article class="card wide">
+          <h3>16 selector positions</h3>
+          <div class="mode-grid">
+            <div class="mode-cell"><b>1 - PATTERN / SYNC OUT <a class="mode-link" href="#play" aria-label="Go to Pattern Play">↓</a></b><small>Patterns, internal tempo, and MIDI/DIN clock output.</small></div>
+            <div class="mode-cell"><b>2 - PATTERN / DIN SYNC <a class="mode-link" href="#play" aria-label="Go to Pattern Play">↓</a></b><small>Patterns driven by DIN Sync input.</small></div>
+            <div class="mode-cell"><b>3 - PATTERN / MIDI SYNC <a class="mode-link" href="#play" aria-label="Go to Pattern Play">↓</a></b><small>Patterns driven by MIDI clock, with MIDI performance control.</small></div>
+            <div class="mode-cell"><b>4 - PATTERN / EDIT <a class="mode-link" href="#edit" aria-label="Go to Pattern Edit">↓</a></b><small>Create patterns and edit them step by step or live.</small></div>
+            <div class="mode-cell off"><b>5 - TRACK / SYNC OUT</b><small>Unsupported</small></div>
+            <div class="mode-cell off"><b>6 - TRACK / DIN SYNC</b><small>Unsupported</small></div>
+            <div class="mode-cell off"><b>7 - TRACK / MIDI SYNC</b><small>Unsupported</small></div>
+            <div class="mode-cell off"><b>8 - TRACK / EDIT</b><small>Not Track Edit: this is a hazardous DAC/output test.</small></div>
+            <div class="mode-cell"><b>9 - COMPUTER CONTROL</b><small>Button/LED test; USB remains active in every mode.</small></div>
+            <div class="mode-cell"><b>10 - BOOTLOAD <a class="mode-link" href="#bootloader" aria-label="Go to Bootloader">↓</a></b><small>Enter the bootloader at power-on only.</small></div>
+            <div class="mode-cell"><b>11 - USER C <a class="mode-link" href="#userc" aria-label="Go to User C Settings">↓</a></b><small>Persistent firmware settings.</small></div>
+            <div class="mode-cell"><b>12 - USER B <a class="mode-link" href="#edit" aria-label="Go to Pattern Edit">↓</a></b><small>Pattern Edit with DIN Sync input.</small></div>
+            <div class="mode-cell"><b>13 - USER A <a class="mode-link" href="#edit" aria-label="Go to Pattern Edit">↓</a></b><small>Pattern Edit with MIDI clock input.</small></div>
+            <div class="mode-cell"><b>14 - KEYBOARD <a class="mode-link" href="#keyboard" aria-label="Go to Keyboard">↓</a></b><small>Play from the panel and send MIDI notes.</small></div>
+            <div class="mode-cell"><b>15 - RANDOM <a class="mode-link" href="#random" aria-label="Go to Random Mode">↓</a></b><small>Autonomous random noodling performance.</small></div>
+            <div class="mode-cell"><b>16 - MIDI PLAY <a class="mode-link" href="#midi" aria-label="Go to MIDI">↓</a></b><small>Play the synthesizer directly from MIDI, bypassing the sequencer.</small></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="manual-section section-play" id="play">
+      <div class="section-title"><h2>Pattern Play</h2></div>
+      <div class="cards">
+        <article class="card full">
+          <h3>All Pattern Play actions</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><th scope="col">Combination</th><th scope="col">Action</th></tr>
+            <tr><td><x-key>BANK</x-key></td><td>Select bank 1–16.</td></tr>
+            <tr><td>White keys <x-wkey>1</x-wkey>–<x-wkey>8</x-wkey></td><td>Select one of eight patterns.</td></tr>
+            <tr><td>Hold <x-key>CHAIN</x-key> + <x-wkey>1</x-wkey>–<x-wkey>8</x-wkey></td><td>Enter a chain of up to 32 patterns in the pressed order; repeats are allowed. Release CHAIN to finish.</td></tr>
+            <tr><td><x-key>CHAIN</x-key> + <x-key>PREVIOUS</x-key></td><td>Return to the start of the current cycle, normally the first step of the pattern.</td></tr>
+            <tr><td><x-key>UP</x-key> + <x-wkey>note</x-wkey></td><td>Transpose from 0 to +12 semitones.</td></tr>
+            <tr><td><x-key>DOWN</x-key> + <x-wkey>note</x-wkey></td><td>Transpose from −12 to 0 semitones.</td></tr>
+            <tr><td>Hold <x-key>REST</x-key></td><td>Mute all notes immediately.</td></tr>
+            <tr><td>Hold <x-key>ACCENT</x-key></td><td>Force accent on every note.</td></tr>
+            <tr><td>Hold <x-key>SLIDE</x-key></td><td>Force slide on every note.</td></tr>
+            <tr><td><x-key>PREVIOUS</x-key> → <x-key>NEXT</x-key></td><td>Jump forward one step.</td></tr>
+            <tr><td><x-key>NEXT</x-key> → <x-key>PREVIOUS</x-key></td><td>Return to the remembered previous step.</td></tr>
+            <tr><td>MODE → <x-key>PATTERN / EDIT</x-key></td><td>Open the current pattern for live editing while it keeps playing, retaining the clock source in use.</td></tr>
+            <tr><td>Hold <x-key>DONE</x-key> + two step keys</td><td>Loop the section between the two boundaries; release DONE to start. If the first boundary is later than the second, playback runs in reverse.</td></tr>
+            <tr><td><x-key>DONE</x-key> alone</td><td>Clear the loop.</td></tr>
+            <tr><td><x-key>DONE</x-key> + <x-key>TEMPO</x-key></td><td>Toggle eighth notes for the loop.</td></tr>
+          </tbody></table></div>
+          <p class="table-note">The currently playing pattern flashes; the other chain entries remain lit. For key pairs written with →, hold the first key and press the second.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section section-tempo" id="tempo">
+      <div class="section-title"><h2>Tempo Parameters</h2></div>
+      <div class="cards">
+        <article class="card full">
+          <h3>Change a tempo parameter</h3>
+          <p>In any Pattern Play mode, press the <x-key>TEMPO</x-key> knob. The TEMPO LED stays lit, and the 1–16 LEDs show the current value.</p>
+          <p>Next, press the key for the parameter you want to change in the table below. Then turn the <x-key>TEMPO</x-key> knob to adjust it. To change something else, press its key and turn the knob again.</p>
+          <p>Press the knob once more, or move <x-key>BANK</x-key>, when you are finished.</p>
+          <div class="table-scroll"><table><tbody>
+            <tr><th>Key</th><th>Parameter</th><th>Range</th></tr>
+            <tr><td><x-key>UP</x-key></td><td>Probability of a random octave up</td><td>0–61%</td></tr>
+            <tr><td><x-key>DOWN</x-key></td><td>Probability of a random octave down</td><td>0–61%</td></tr>
+            <tr><td><x-key>SLIDE</x-key></td><td>Probability of inverting slide</td><td>0–61%</td></tr>
+            <tr><td><x-key>ACCENT</x-key></td><td>Probability of inverting accent</td><td>0–61%</td></tr>
+            <tr><td><x-key>REST</x-key></td><td>Probability of a random rest</td><td>0–61%</td></tr>
+            <tr><td><x-key>PREVIOUS</x-key></td><td>Swing</td><td>0–100%</td></tr>
+            <tr><td><x-key>NEXT</x-key></td><td>Gate length</td><td>0–38</td></tr>
+            <tr><td><x-key>C#</x-key></td><td>Apply variations every Nth pass</td><td>1–16</td></tr>
+            <tr><td><x-key>D#</x-key></td><td>First step in the variation range</td><td>1–16</td></tr>
+            <tr><td><x-key>F#</x-key></td><td>Last step in the variation range</td><td>1–16</td></tr>
+          </tbody></table></div>
+        </article>
+
+        <article class="card wide">
+          <h3>Parameter presets</h3>
+          <p>A preset is a saved snapshot of all ten parameters in the table above. It lets you bring back a complete variation and timing setup without adjusting every value again.</p>
+          <p>There are seven preset slots, shared by all patterns, and they remain saved after power-off. Set the parameters the way you want, then hold <x-key>DONE</x-key> and press a white key from <x-wkey>1</x-wkey> to <x-wkey>7</x-wkey> to save them. To recall that setup later, open Tempo Parameters and press the same white key on its own.</p>
+          <div class="table-scroll"><table><tbody>
+            <tr><th>Combination</th><th>Action</th></tr>
+            <tr><td><x-key>CHAIN</x-key> (tap)</td><td>Tap tempo.</td></tr>
+            <tr><td><x-wkey>1</x-wkey>–<x-wkey>7</x-wkey></td><td>Load that preset. Its values take effect immediately.</td></tr>
+            <tr><td><x-key>DONE</x-key> + <x-wkey>1</x-wkey>…<x-wkey>7</x-wkey></td><td>Save the current ten parameter values to that preset slot.</td></tr>
+            <tr><td><x-wkey>C'</x-wkey></td><td>Reset probabilities and swing to 0, gate to 18, and the range to steps 1–16.</td></tr>
+          </tbody></table></div>
+          <p class="table-note">BPM is not part of a preset. Loading normally replaces all ten parameter values. To keep the current swing and gate length instead, enable MODE → USER C → page <x-key>D#</x-key> → white key <x-wkey>3</x-wkey>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section section-edit" id="edit">
+      <div class="section-title"><h2>Pattern Edit</h2></div>
+      <div class="cards">
+        <article class="card full">
+          <h3>All Pattern Edit actions</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><th scope="col">Key</th><th scope="col">Action</th></tr>
+            <tr><td><x-wkey>note</x-wkey></td><td>Set the pitch.</td></tr>
+            <tr><td><x-key>PREVIOUS</x-key> / <x-key>NEXT</x-key></td><td>Enter step edit, then move the cursor through active steps. The selected step flashes in the 1–16 row.</td></tr>
+            <tr><td><x-key>DONE</x-key></td><td>Exit step edit without saving.</td></tr>
+            <tr><td><x-key>UP</x-key> / <x-key>DOWN</x-key></td><td>Change the octave.</td></tr>
+            <tr><td><x-key>REST</x-key></td><td>Turn the step into a rest.</td></tr>
+            <tr><td><x-key>ACCENT</x-key> / <x-key>SLIDE</x-key></td><td>Toggle their attributes.</td></tr>
+            <tr><td><x-key>REST</x-key> + <x-key>ACCENT</x-key> + <x-key>SLIDE</x-key></td><td>Place an End Of Pattern marker on the current step.</td></tr>
+            <tr><td>Hold <x-key>DONE</x-key>, select <x-key>BANK</x-key> + <x-wkey>1</x-wkey>–<x-wkey>8</x-wkey>, release</td><td>Store the pattern at the selected destination.</td></tr>
+            <tr><td><x-key>TEMPO</x-key> (press)</td><td>Toggle between the standard 16-step grid and the 15-position triplet grid.</td></tr>
+            <tr><td><x-key>REST</x-key></td><td>Fill active steps with rests.</td></tr>
+            <tr><td><x-key>DOWN</x-key></td><td>Fill active steps with low C.</td></tr>
+            <tr><td><x-key>UP</x-key></td><td>Fill active steps with middle C.</td></tr>
+            <tr><td><x-key>SLIDE</x-key></td><td>Fill active steps with EOP markers.</td></tr>
+            <tr><td><x-key>NEXT</x-key> → <x-key>PREVIOUS</x-key></td><td>Rotate the active pattern left.</td></tr>
+            <tr><td><x-key>PREVIOUS</x-key> → <x-key>NEXT</x-key></td><td>Rotate the active pattern right.</td></tr>
+          </tbody></table></div>
+          <p class="table-note">With auto increment (MODE → USER C → page <x-key>C#</x-key> → white key <x-wkey>7</x-wkey>), the cursor advances one step after entering a note or rest. Set <x-key>DOWN</x-key>, <x-key>UP</x-key>, <x-key>SLIDE</x-key>, and <x-key>ACCENT</x-key> before pressing the note or rest key. </p>
+          <p class="table-note">A flashing DONE LED indicates unsaved changes; pressing DONE in the randomizer first exits it, then continues with the normal save operation. Quick fill and rotation work only while stopped and outside step edit.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section section-randomizer" id="randomizer">
+      <div class="section-title"><h2>Pattern Randomizer</h2></div>
+      <div class="cards">
+        <article class="card">
+          <h3>Enter the randomizer</h3>
+          <p>Start any Pattern Edit mode and press <x-key>CHAIN</x-key>. Press CHAIN again to return.</p>
+          <p><x-key>DONE</x-key> also exits and immediately opens save-destination selection.</p>
+        </article>
+
+        <article class="card wide">
+          <h3>Select a scale: hold C</h3>
+          <p>Hold low <x-wkey>C</x-wkey>, then press a white key. Selecting a scale does not change the pattern by itself.</p>
+          <div class="table-scroll"><table><tbody>
+            <tr><th scope="col">Key</th><th scope="col">Scale rooted at C</th></tr>
+            <tr><td><x-wkey>D</x-wkey></td><td>Chromatic</td></tr>
+            <tr><td><x-wkey>E</x-wkey></td><td>Minor pentatonic</td></tr>
+            <tr><td><x-wkey>F</x-wkey></td><td>Natural minor</td></tr>
+            <tr><td><x-wkey>G</x-wkey></td><td>Major</td></tr>
+            <tr><td><x-wkey>A</x-wkey></td><td>Phrygian</td></tr>
+            <tr><td><x-wkey>B</x-wkey></td><td>Locrian</td></tr>
+            <tr><td><x-wkey>C'</x-wkey></td><td>Mixolydian</td></tr>
+          </tbody></table></div>
+          <p class="table-note">The selected scale is saved immediately and restored after power-up. It is independent of the randomizer setup described below.</p>
+        </article>
+
+        <article class="card full">
+          <h3>All randomizer actions</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><th scope="col">Key</th><th scope="col">Action</th></tr>
+            <tr><td><x-wkey>D</x-wkey></td><td>Pick a new randomizer setup and generate a pattern in the selected scale.</td></tr>
+            <tr><td><x-wkey>E</x-wkey></td><td>Reuse and save the current setup, then generate another pattern in the selected scale.</td></tr>
+            <tr><td><x-wkey>F</x-wkey></td><td>Undo the last operation; otherwise reload the stored pattern.</td></tr>
+            <tr><td><x-wkey>F</x-wkey> ×2</td><td>Fill with rests, or C2 when the setting MODE → USER C → page <x-key>F#</x-key> → white key <x-wkey>1</x-wkey> is enabled.</td></tr>
+            <tr><td><x-key>F#</x-key></td><td>Randomize note pitches only.</td></tr>
+            <tr><td><x-wkey>G</x-wkey></td><td>Randomly shift some notes by octaves.</td></tr>
+            <tr><td><x-key>G#</x-key></td><td>Set every pitch to C while preserving octaves.</td></tr>
+            <tr><td><x-wkey>A</x-wkey></td><td>Shift the highest eligible note down one octave.</td></tr>
+            <tr><td><x-key>A#</x-key></td><td>Shift the lowest eligible note up one octave.</td></tr>
+            <tr><td><x-wkey>B</x-wkey> / <x-wkey>C'</x-wkey></td><td>Shift the entire pattern down / up one octave.</td></tr>
+            <tr><td><x-key>DOWN</x-key> / <x-key>UP</x-key></td><td>Move every note down / up one degree in the selected scale.</td></tr>
+            <tr><td><x-key>REST</x-key></td><td>Shuffle note positions.</td></tr>
+            <tr><td><x-key>ACCENT</x-key></td><td>Randomize accents.</td></tr>
+            <tr><td><x-key>SLIDE</x-key></td><td>Randomize slides.</td></tr>
+            <tr><td><x-key>PREVIOUS</x-key></td><td>Simplify by repeating a 4- or 8-step section.</td></tr>
+            <tr><td><x-key>NEXT</x-key></td><td>Choose a random pattern length.</td></tr>
+          </tbody></table></div>
+        </article>
+
+        <article class="card full">
+          <h3>D versus E: new setup or reused setup</h3>
+          <p>Both keys generate a completely new pattern in the selected scale. They differ only in how they choose the randomizer setup. A setup is one of 13 internal probability profiles controlling note movement, rests, accents, slides, repeated sections, long notes, and other pattern structure. It is not a scale and it is not the generated pattern.</p>
+          <div class="table-scroll"><table><tbody>
+            <tr><th scope="col">Key</th><th scope="col">Setup</th><th scope="col">Result and storage</th></tr>
+            <tr><td><x-wkey>D</x-wkey></td><td>Pick a new setup randomly from the 13 profiles.</td><td>Generate a new pattern with that profile and the selected scale. The profile becomes the current setup in RAM, but D does not save it to EEPROM.</td></tr>
+            <tr><td><x-wkey>E</x-wkey></td><td>Reuse the current setup instead of picking another profile.</td><td>Generate another new pattern with the same profile and selected scale. E also saves that profile to EEPROM, so it can be reused after power-up.</td></tr>
+          </tbody></table></div>
+          <p class="table-note">Typical workflow: press D until the generated style has the balance of notes, rests, accents, and slides you want. Then press E to keep making new variations with that same style. E does not replay the same notes; the random choices are rerolled while the probability profile stays fixed.</p>
+          <p class="table-note">After power-up, E uses the last setup saved by E. If D has been pressed since power-up, E instead reuses and saves the setup chosen by the most recent D press.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section section-midi" id="midi">
+      <div class="section-title"><h2>MIDI</h2></div>
+      <div class="cards">
+        <article class="card">
+          <h3>Play the synthesizer from MIDI</h3>
+          <p>The sequencer is bypassed. <x-key>BANK</x-key> selects and stores MIDI input channel 1–16; Pattern / MIDI SYNC uses the same channel.</p>
+          <p>Out-of-range notes are octave-wrapped. Overlapping notes play legato with slide. Velocity 101–127 adds accent.</p>
+        </article>
+
+        <article class="card wide">
+          <h3>Note performance commands</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><th>MIDI input</th><th>Action</th></tr>
+            <tr><td>Notes 0–11</td><td>No scale correction; note modulo 12 sets the root.</td></tr>
+            <tr><td>Notes 12–23</td><td>Major-scale correction; modulo 12 sets the root.</td></tr>
+            <tr><td>Notes 24–35</td><td>Minor-scale correction; modulo 12 sets the root.</td></tr>
+            <tr><td>36, 38, 40, 41/42, 43/44, 45/46, 47, 48</td><td>Select pattern 1–8.</td></tr>
+            <tr><td>37 (C#)</td><td>Stop trigger.</td></tr>
+            <tr><td>39 (D#)</td><td>Toggle trigger latch.</td></tr>
+            <tr><td>49–96</td><td>Transpose relative to MIDI note 60.</td></tr>
+          </tbody></table></div>
+          <p class="table-note">When the setting MODE → USER C → page <x-key>D#</x-key> → white key <x-wkey>1</x-wkey> is off, trigger notes start playback; releasing the last one stops it unless latch mode is active.</p>
+        </article>
+
+        <article class="card">
+          <h3>Controllers and Program Change</h3>
+          <p><x-key>CC 1</x-key> sets gate length. For <x-key>CC 2</x-key>, 0–63 disables variations and 64–127 enables them. <x-key>CC 123</x-key> sends all notes off and resets triggers.</p>
+          <p>Program Change 0–127 selects the bank and pattern, with eight programs per bank.</p>
+          <p>The setting MODE → USER C → page <x-key>D#</x-key> → white key <x-wkey>1</x-wkey> enables classic MIDI Start/Stop.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section section-keyboard" id="keyboard">
+      <div class="section-title"><h2>Keyboard</h2></div>
+      <div class="cards">
+        <article class="card wide">
+          <h3>MIDI keyboard function</h3>
+          <p>Sends MIDI notes.</p>
+          <p>The <x-key>BANK</x-key> knob sets the MIDI output address (channel). This address is stored permanently and is also used by other modes. The Step/Bank LEDs show the selected address whenever Keyboard mode is selected.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section section-random" id="random">
+      <div class="section-title"><h2>Random Mode</h2></div>
+      <div class="cards">
+        <article class="card wide">
+          <h3>Autonomous random performance</h3>
+          <p>The <x-key>RANDOM</x-key> MODE position immediately starts the internal clock and continuously generates random notes, accents, slides, and LED activity. The TEMPO encoder changes the speed.</p>
+          <p class="note">This mode provides no pattern control and produces nothing that can be saved. Use Pattern Randomizer for editable generation.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section section-userc" id="userc">
+      <div class="section-title"><h2>User C Settings</h2></div>
+      <div class="cards">
+        <article class="card">
+          <h3>Change settings</h3>
+          <p><b>USER C</b> is a MODE SELECT position that opens the settings. Black key <x-key>C#</x-key>, <x-key>D#</x-key>, or <x-key>F#</x-key> selects a page. White keys <x-wkey>1</x-wkey>–<x-wkey>8</x-wkey> toggle options.</p>
+          <p>A lit white-key LED means On. Each change is written to EEPROM immediately.</p>
+        </article>
+
+        <article class="card wide">
+          <h3><x-key>C#</x-key> - General editor settings</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><th>#</th><th>When enabled</th><th>Default</th></tr>
+            <tr><td><x-wkey>1</x-wkey></td><td>Disable the +2 octave in Pattern Edit; +1 remains available.</td><td>Off</td></tr>
+            <tr><td><x-wkey>2</x-wkey></td><td>Do not save TEMPO changes automatically.</td><td>Off</td></tr>
+            <tr><td><x-wkey>3</x-wkey></td><td>Live Edit updates the chain entry when saved to another location.</td><td>On</td></tr>
+            <tr><td><x-wkey>4</x-wkey></td><td>—</td><td>Off</td></tr>
+            <tr><td><x-wkey>5</x-wkey></td><td>Preserve the selected pattern when changing modes.</td><td>On</td></tr>
+            <tr><td><x-wkey>6</x-wkey></td><td>—</td><td>Off</td></tr>
+            <tr><td><x-wkey>7</x-wkey></td><td>Automatically advance after entering a note/rest in step edit.</td><td>On</td></tr>
+            <tr><td><x-wkey>8</x-wkey></td><td>—</td><td>Off</td></tr>
+          </tbody></table></div>
+        </article>
+
+        <article class="card wide">
+          <h3><x-key>D#</x-key> - MIDI, timing, and scales</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><th>#</th><th>When enabled</th><th>Default</th></tr>
+            <tr><td><x-wkey>1</x-wkey></td><td>Use classic MIDI Start/Stop instead of starting with trigger notes.</td><td>On</td></tr>
+            <tr><td><x-wkey>2</x-wkey></td><td>Disable the MIDI sync fix; stored but currently unused.</td><td>Off</td></tr>
+            <tr><td><x-wkey>3</x-wkey></td><td>Preserve swing/gate when loading a parameter preset.</td><td>Off</td></tr>
+            <tr><td><x-wkey>4</x-wkey></td><td>Show dim orientation LEDs every 4th step, or every 3rd in triplets.</td><td>On</td></tr>
+            <tr><td><x-wkey>5</x-wkey></td><td>Use faster but less stable external-clock measurement.</td><td>Off</td></tr>
+            <tr><td><x-wkey>6</x-wkey></td><td>MIDI Continue restarts like Start instead of waiting for the next measure.</td><td>Off</td></tr>
+            <tr><td><x-wkey>7</x-wkey></td><td>Use scale variants with a diminished second.</td><td>Off</td></tr>
+            <tr><td><x-wkey>8</x-wkey></td><td>Raise the minor seventh for harmonic minor.</td><td>Off</td></tr>
+          </tbody></table></div>
+        </article>
+
+        <article class="card wide">
+          <h3><x-key>F#</x-key> - Randomizer, cursor, encoder</h3>
+          <div class="table-scroll"><table><tbody>
+            <tr><th>#</th><th>When enabled</th><th>Default</th></tr>
+            <tr><td><x-wkey>1</x-wkey></td><td>Double-<x-wkey>F</x-wkey> in the randomizer fills the pattern with C2 instead of rests.</td><td>Off</td></tr>
+            <tr><td><x-wkey>2</x-wkey></td><td>—</td><td>Off</td></tr>
+            <tr><td><x-wkey>3</x-wkey></td><td>—</td><td>Off</td></tr>
+            <tr><td><x-wkey>4</x-wkey></td><td>—</td><td>Off</td></tr>
+            <tr><td><x-wkey>5</x-wkey></td><td>Preserve step edit and cursor state across Run/Stop.</td><td>Off</td></tr>
+            <tr><td><x-wkey>6</x-wkey></td><td>Add quadrature encoder processing on ATmega162; no effect on ATmega2561.</td><td>Off</td></tr>
+            <tr><td><x-wkey>7</x-wkey></td><td>—</td><td>Off</td></tr>
+            <tr><td><x-wkey>8</x-wkey></td><td>—</td><td>Off</td></tr>
+          </tbody></table></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="manual-section" id="bootloader">
+      <div class="section-title"><h2>Bootloader</h2></div>
+      <div class="cards">
+        <article class="card">
+          <h3>Enter the USB bootloader</h3>
+          <ol>
+            <li>Switch off the power.</li>
+            <li>Set MODE to BOOTLOAD.</li>
+            <li>Power on and upload firmware with compatible software.</li>
+            <li>To exit, power off, select another mode, and power on again.</li>
+          </ol>
+          <p  class="note">Turning MODE to BOOTLOAD while the firmware is already running only idles the application; it does not start the bootloader.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
