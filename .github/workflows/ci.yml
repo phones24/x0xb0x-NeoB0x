@@ -23,25 +23,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc-avr avr-libc binutils-avr make
 
-      - name: Build atmega2561
-        run: make MCU=atmega2561
-
-      - name: Build atmega162
-        run: make MCU=atmega162
-
-      - name: Check flash budgets
-        run: |
-          check() {
-            elf=$1; limit=$2
-            size=$(avr-size "$elf" | awk 'NR==2 {print $1+$2}')
-            [ -n "$size" ] || { echo "::error::$elf not found"; exit 1; }
-            echo "$elf: $size / $limit bytes"
-            if [ "$size" -gt "$limit" ]; then
-              echo "::error::$elf exceeds flash limit ($size > $limit)"
-              exit 1
-            fi
-          }
-          # atmega162: bootloader sits at 0x3E00 -> 15872 bytes usable
-          check out/atmega162/NeoB0x_atmega162.elf 15872
-          # atmega2561: 256KB flash minus 16KB boot block (largest BOOTSZ)
-          check out/atmega2561/NeoB0x_atmega2561.elf 245760
+      - name: Build firmware
+        run: node scripts/build.mjs build

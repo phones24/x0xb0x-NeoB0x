@@ -3,7 +3,7 @@ name: release
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 permissions:
@@ -14,72 +14,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+      tag: ${{ steps.check.outputs.tag }}
+      needed: ${{ steps.check.outputs.needed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check whether a release is needed
+        id: check
+        run: node scripts/check-release.mjs
+
   build-release:
+    needs: check
+    if: needs.check.outputs.needed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Verify tag is free
+        run: node scripts/build.mjs check-tag
 
       - name: Install AVR toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-avr avr-libc binutils-avr make
 
-      - name: Build atmega2561
-        run: make MCU=atmega2561
-
-      - name: Build atmega162
-        run: make MCU=atmega162
-
-      - name: Check flash budgets
-        run: |
-          check() {
-            elf=$1; limit=$2
-            size=$(avr-size "$elf" | awk 'NR==2 {print $1+$2}')
-            [ -n "$size" ] || { echo "::error::$elf not found"; exit 1; }
-            echo "$elf: $size / $limit bytes"
-            if [ "$size" -gt "$limit" ]; then
-              echo "::error::$elf exceeds flash limit ($size > $limit)"
-              exit 1
-            fi
-          }
-          # atmega162: bootloader sits at 0x3E00 -> 15872 bytes usable
-          check out/atmega162/NeoB0x_atmega162.elf 15872
-          # atmega2561: 256KB flash minus 16KB boot block (largest BOOTSZ)
-          check out/atmega2561/NeoB0x_atmega2561.elf 245760
+      - name: Build firmware
+        run: node scripts/build.mjs build
 
       - name: Collect release files
-        run: |
-          version=$(awk '/define[ \t]+VERSION[ \t]+[0-9]+/ { printf "%d.%02d", int($3/100), $3%100 }' src/main.h)
-          [ -n "$version" ] || { echo "::error::cannot parse VERSION macro from src/main.h"; exit 1; }
-          run_num=${{ github.run_number }}
-          mkdir -p release
-          cp out/atmega162/NeoB0x_atmega162.hex "release/NeoB0x_v${version}+build.${run_num}_atmega162.hex"
-          cp out/atmega2561/NeoB0x_atmega2561.hex "release/NeoB0x_v${version}+build.${run_num}_atmega2561.hex"
-          {
-            echo "## Firmware"
-            echo "| target | file |"
-            echo "| --- | --- |"
-            echo "| original x0xb0x (ATmega162) | \`NeoB0x_v${version}+build.${run_num}_atmega162.hex\` |"
-            echo "| x0xlarge (ATmega2561) | \`NeoB0x_v${version}+build.${run_num}_atmega2561.hex\` |"
-            echo
-            echo "## Sizes"
-            echo '```'
-            avr-size out/atmega162/NeoB0x_atmega162.elf out/atmega2561/NeoB0x_atmega2561.elf
-            echo '```'
-          } > release_notes.md
-          cat release_notes.md
-
-      - name: Compute release tag from src/main.h
-        run: |
-          tag="v$(awk '/define[ \t]+VERSION[ \t]+[0-9]+/ { printf "%d.%02d", int($3/100), $3%100 }' src/main.h)"
-          [ -n "$tag" ] && [ "$tag" != "v" ] || { echo "::error::VERSION macro in src/main.h missing or invalid"; exit 1; }
-          echo "TAG=$tag" >> "$GITHUB_ENV"
-          echo "release tag: $tag"
-          if git ls-remote --exit-code origin "refs/tags/$tag" >/dev/null 2>&1; then
-            echo "::error::tag $tag already exists - bump the VERSION macro in src/main.h before pushing to master"
-            exit 1
-          fi
+        run: node scripts/build.mjs collect ${{ github.run_number }}
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
@@ -88,11 +57,10 @@ jobs:
           path: release/*.hex
 
       - name: Create release
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.TAG }}
+          tag_name: ${{ needs.check.outputs.tag }}
           files: release/*.hex
-          body_path: release_notes.md
           generate_release_notes: true
           fail_on_unmatched_files: true

@@ -15,7 +15,7 @@ exit /b 1
 :build
 cd /d "%~dp0"
 
-make clean
+make MCU=%MCU% clean
 if errorlevel 1 exit /b 1
 
 make MCU=%MCU%

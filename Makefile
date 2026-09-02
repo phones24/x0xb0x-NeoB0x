@@ -1,7 +1,13 @@
 MCU    ?= atmega2561
-TARGET  = NeoB0x_$(MCU)
-OUT     = out/$(MCU)
 SRC_DIR = src
+# firmware version, derived from the VERSION macro in src/main.h (100 -> "1.00")
+VERSION_NUM := $(shell sed -n 's/^#define[[:space:]]\+VERSION[[:space:]]\+\([0-9]\+\).*/\1/p' $(SRC_DIR)/main.h)
+VERSION := $(shell printf '%d.%02d' $$(( $(VERSION_NUM) / 100 )) $$(( $(VERSION_NUM) % 100 )))
+ifeq ($(strip $(VERSION_NUM)),)
+$(error cannot parse VERSION macro from $(SRC_DIR)/main.h)
+endif
+TARGET  = NeoB0x_$(VERSION)_$(MCU)
+OUT     = out/$(MCU)
 CC      = avr-gcc
 OBJCOPY = avr-objcopy
 OBJDUMP = avr-objdump
@@ -56,7 +62,11 @@ $(OUT)/$(TARGET).lss: $(OUT)/$(TARGET).elf
 size: $(OUT)/$(TARGET).elf
 	$(SIZE) $(OUT)/$(TARGET).elf
 
+# remove only this target's build folder, keep the other MCU's build intact
 clean:
-	rm -rf out
+	rm -rf $(OUT)
 
-.PHONY: all clean size
+.PHONY: all clean size version
+
+version:
+	@echo $(VERSION)

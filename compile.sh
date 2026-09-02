@@ -15,7 +15,8 @@ esac
 DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$DIR"
 
-make clean
+make MCU="$MCU" clean
 make MCU="$MCU"
 
-echo "Built $DIR/out/${MCU}/NeoB0x_${MCU}.hex"
+VERSION="$(make -s MCU="$MCU" version)"
+echo "Built $DIR/out/${MCU}/NeoB0x_${VERSION}_${MCU}.hex"

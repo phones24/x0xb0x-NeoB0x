@@ -48,7 +48,7 @@ Build either target from the repository root:
 
 On Windows, run `compile.cmd <mcu>` instead.
 
-The resulting hex file is written to `out/<mcu>/NeoB0x_<mcu>.hex`.
+The resulting hex file is written to `out/<mcu>/NeoB0x_<version>_<mcu>.hex` (e.g. `NeoB0x_1.00_atmega162.hex`).
 
 ## Credits & history
 
