@@ -4,6 +4,8 @@ Firmware for the [x0xb0x](https://www.adafruit.com/) (TB-303 style bassline
 sequencer/synth clone) - a continuation of **MarOS 1.5** for the
 original ATmega162 CPU and the ATmega2561 ("x0xlarge") upgrade.
 
+[Flash NeoB0x with the web-based flasher](https://x0.randomware-audio.cc/).
+
 NeoB0x adds to MarOS: extended randomizer scales (phrygian, locrian,
 mixolydian) with scale-aware transpose, a batch of bug fixes collected from
 the original forum thread (pattern clear, undo restore, auto-stop on lost
