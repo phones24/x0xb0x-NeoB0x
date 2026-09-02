@@ -8,7 +8,7 @@ NeoB0x adds to MarOS: extended randomizer scales (phrygian, locrian,
 mixolydian) with scale-aware transpose, a batch of bug fixes collected from
 the original forum thread (pattern clear, undo restore, auto-stop on lost
 external clock, settings defaults, held-notes leak, atomic swing timers, MIDI
-RX overflow, tempo EEPROM wear).
+RX overflow, tempo EEPROM wear, etc...).
 
 ## Documentation
 
