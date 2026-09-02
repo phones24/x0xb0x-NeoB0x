@@ -48,7 +48,7 @@ jobs:
         run: node scripts/build.mjs build
 
       - name: Collect release files
-        run: node scripts/build.mjs collect ${{ github.run_number }}
+        run: node scripts/build.mjs collect
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4

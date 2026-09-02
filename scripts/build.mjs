@@ -36,18 +36,16 @@ function checkFlash(mcu, version) {
 		);
 }
 
-function collectFiles(version, runNum) {
+function collectFiles(version) {
 	mkdirSync("release", { recursive: true });
 
 	for (const mcu of TARGETS) {
-		copyFileSync(
-			`out/${mcu}/NeoB0x_${version}_${mcu}.hex`,
-			`release/NeoB0x_v${version}+build.${runNum}_${mcu}.hex`,
-		);
+		const name = `NeoB0x_${version}_${mcu}.hex`;
+		copyFileSync(`out/${mcu}/${name}`, `release/${name}`);
 	}
 }
 
-const [cmd, arg] = process.argv.slice(2);
+const [cmd] = process.argv.slice(2);
 
 try {
 	const { version, tag } = await readVersion();
@@ -74,13 +72,9 @@ try {
 			checkFlash(mcu, version);
 		}
 	} else if (cmd === "collect") {
-		if (!arg) {
-			fail("usage: build.mjs collect <run-number>");
-		}
-
-		collectFiles(version, arg);
+		collectFiles(version);
 	} else {
-		fail("usage: build.mjs check-tag | build | collect <run-number>");
+		fail("usage: build.mjs check-tag | build | collect");
 	}
 } catch (err) {
 	fail(err.message);
