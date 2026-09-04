@@ -16,8 +16,7 @@ RX overflow, tempo EEPROM wear, etc...).
 
 ## Documentation
 
-[One-page HTML cheatsheet](https://phones24.github.io/x0xb0x-NeoB0x/cheatsheet.html) —
-  searchable reference for every mode and panel control.
+[One-page HTML cheatsheet](https://phones24.github.io/x0xb0x-NeoB0x/cheatsheet.html)
 
 ## Prepare
 
