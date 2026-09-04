@@ -62,7 +62,6 @@ NeoB0x stands on the shoulders of the x0xb0x firmware family:
 - **Sokkan** — sokkOS
 - **mario1089** — MarOS 1.0 – 1.5.1
 - **Nordcore** — MarOS 1.5.1-r1 … V1.82 maintenance releases
-- **phones24** — NeoB0x fork: randomizer scales, bug fixes
 
 Original MarOS thread (bug reports, history, releases):
 <https://forums.adafruit.com/viewtopic.php?t=33914>
