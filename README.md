@@ -16,7 +16,7 @@ RX overflow, tempo EEPROM wear, etc...).
 
 ## Documentation
 
-- [One-page HTML cheatsheet](https://phones24.github.io/x0xb0x-NeoB0x/cheatsheet.html) —
+[One-page HTML cheatsheet](https://phones24.github.io/x0xb0x-NeoB0x/cheatsheet.html) —
   searchable reference for every mode and panel control.
 
 ## Prepare
@@ -38,16 +38,16 @@ brew install avr-binutils avr-gcc avr-libc
 
 **Windows**
 
-Use Microchip Studio (the successor of Atmel Studio) and build the included
-`NeoB0x_2561.cproj`. Alternatively, install an avr-gcc toolchain with make.
+Use Microchip Studio (the successor of Atmel Studio) to build. 
+Alternatively, install an avr-gcc toolchain with make.
 
 ## Building
 
 Build either target from the repository root:
 
 ```sh
-./compile.sh atmega2561   # x0xlarge (default)
-./compile.sh atmega162    # original x0xb0x CPU
+./compile.sh atmega162    # original x0xb0x CPU (default)
+./compile.sh atmega2561   # x0xlarge 
 ```
 
 On Windows, run `compile.cmd <mcu>` instead.
